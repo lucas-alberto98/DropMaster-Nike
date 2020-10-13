@@ -1,0 +1,17 @@
+{
+    "appId": "org.dropmaster.client",
+    "productName": "DropMaster",
+    "extends": null,
+    "icon": "assets/icon.png",
+    "files": ["build/**/*", "core_build/**/*", "node_modules/**/*"],
+    "extraMetadata": {
+        "main": "./core_build/app.js"
+    },
+    "publish": [
+        {
+            "provider": "s3",
+            "bucket": "dropmaster-cdn",
+            "path": "/releases/win-ia32"
+        }
+    ]
+}

@@ -1,0 +1,89 @@
+version: 2.1
+
+executors:
+    electron:
+        docker:
+            - image: electronuserland/builder:wine
+
+jobs:
+    install:
+        executor: electron
+        steps:
+            - checkout
+            - run:
+                  name: 'Install dependencies'
+                  command: 'npx yarn install'
+            - save_cache:
+                  key: dropmaster-client-v1-{{ .Environment.CIRCLE_SHA1 }}
+                  paths:
+                      - node_modules/
+    test:
+        executor: electron
+        steps:
+            - checkout
+            - restore_cache:
+                  keys:
+                      - dropmaster-client-v1-{{ .Environment.CIRCLE_SHA1 }}
+            - run:
+                  name: 'Test core'
+                  command: 'npx yarn run test:core'
+    build:
+        executor: electron
+        environment:
+            - CI: false
+        steps:
+            - checkout
+            - restore_cache:
+                  keys:
+                      - dropmaster-client-v1-{{ .Environment.CIRCLE_SHA1 }}
+            - run:
+                  name: 'Build React'
+                  command: 'npx yarn run build'
+            - run:
+                  name: 'Build core'
+                  command: 'npx yarn run build:core'
+            - save_cache:
+                  key: dropmaster-client-v2-{{ .Environment.CIRCLE_SHA1 }}
+                  paths:
+                      - build/
+                      - core_build/
+                      - node_modules/
+    deploy:
+        executor: electron
+        steps:
+            - checkout
+            - restore_cache:
+                  keys:
+                      - dropmaster-client-v2-{{ .Environment.CIRCLE_SHA1 }}
+            - run:
+                  name: 'Increment version'
+                  command: 'npx yarn run increment-version'
+            - run:
+                  name: 'Deploy win-ia32'
+                  command: 'npx yarn run deploy:win-ia32'
+            - run:
+                  name: 'Deploy win-x64'
+                  command: 'npx yarn run deploy:win-x64'
+
+workflows:
+    version: 2
+    build_and_deploy:
+        jobs:
+            - install
+            - test:
+                  requires:
+                      - install
+            - build:
+                  filters:
+                      branches:
+                          only:
+                              - master
+                  requires:
+                      - test
+            - deploy:
+                  filters:
+                      branches:
+                          only:
+                              - master
+                  requires:
+                      - build

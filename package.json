@@ -1,0 +1,79 @@
+{
+    "name": "dropmaster-client",
+    "version": "0.1.43",
+    "private": true,
+    "dependencies": {
+        "@testing-library/jest-dom": "^4.2.4",
+        "@testing-library/react": "^9.5.0",
+        "@testing-library/user-event": "^7.2.1",
+        "electron-updater": "^4.3.1",
+        "formik": "^2.1.4",
+        "immutability-helper": "^3.1.1",
+        "jsdom": "^16.3.0",
+        "moment": "^2.27.0",
+        "node-fetch": "^2.6.0",
+        "puppeteer": "^5.1.0",
+        "qs": "^6.9.4",
+        "react": "^16.13.1",
+        "react-dom": "^16.13.1",
+        "react-redux": "^7.2.0",
+        "react-router-dom": "^5.2.0",
+        "react-scripts": "3.4.1",
+        "redux": "^4.0.5",
+        "semver": "^7.3.2",
+        "styled-components": "^5.1.1",
+        "uuid": "^8.3.0"
+    },
+    "scripts": {
+        "start": "npx yarn run build:core && concurrently \"react-scripts start\" \"wait-on http://localhost:3000 && electron core_build/app.js\"",
+        "build": "PUBLIC_URL=./ react-scripts build",
+        "eject": "react-scripts eject",
+        "test:core": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' mocha -r ts-node/register core/__tests__/**/*.test.ts",
+        "build:core": "rimraf core_build && tsc core/app.ts --outDir core_build",
+        "deploy:win-x64": "electron-builder build --win --x64 --publish always -c configs/win-x64.json",
+        "deploy:win-ia32": "electron-builder build --win --ia32 --publish always -c configs/win-ia32.json",
+        "increment-version": "node scripts/increment-version.js"
+    },
+    "extends": null,
+    "eslintConfig": {
+        "extends": "react-app"
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "devDependencies": {
+        "@types/chai": "^4.2.12",
+        "@types/electron": "^1.6.10",
+        "@types/expect": "^24.3.0",
+        "@types/jsdom": "^16.2.3",
+        "@types/mocha": "^8.0.2",
+        "@types/moment": "^2.13.0",
+        "@types/node": "^12.12.50",
+        "@types/node-fetch": "^2.5.7",
+        "@types/puppeteer": "^3.0.1",
+        "@types/qs": "^6.9.3",
+        "@types/react-redux": "^7.1.9",
+        "@types/react-router-dom": "^5.1.5",
+        "@types/styled-components": "^5.1.1",
+        "@types/uuid": "^8.3.0",
+        "chai": "^4.2.0",
+        "concurrently": "^5.2.0",
+        "electron": "^9.1.0",
+        "electron-builder": "^22.7.0",
+        "json-colorizer": "^2.2.2",
+        "mocha": "^8.1.1",
+        "rimraf": "^3.0.2",
+        "ts-node": "^8.10.2",
+        "typescript": "^3.9.7",
+        "wait-on": "^5.1.0"
+    }
+}
