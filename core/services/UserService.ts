@@ -1,5 +1,6 @@
 import { JSDOM } from 'jsdom';
 import Browser from '../utils/Browser';
+import BrowserPool from '../utils/BrowserPool'
 
 type Address = {
     id: string;
@@ -18,9 +19,9 @@ type CreditCard = {
 
 export default class UserService {
     public static async getCreditCards(): Promise<Array<CreditCard>> {
-        const page = await Browser.getPage();
+        //const page = await Browser.getPage();
 
-        const content: any = await page.evaluate(() => {
+        const content: any = await BrowserPool.evaluate(() => {
             return new Promise((resolve) => {
                 fetch('https://www.nike.com.br/Cartoes', {
                     method: 'GET',
@@ -74,9 +75,9 @@ export default class UserService {
     }
 
     public static async getAddresses(): Promise<Array<Address>> {
-        const page = await Browser.getPage();
+        //const page = await Browser.getPage();
 
-        const content: any = await page.evaluate(() => {
+        const content: any = await BrowserPool.evaluate(() => {
             return new Promise((resolve) => {
                 fetch('https://www.nike.com.br/Entrega/MeusEnderecos', {
                     method: 'GET',

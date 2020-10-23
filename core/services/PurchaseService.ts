@@ -1,4 +1,5 @@
 import Browser from '../utils/Browser';
+import BrowserPool from '../utils/BrowserPool';
 import {
     RECAPTCHA_V3_SITE_KEY,
     PaymentMethod,
@@ -15,14 +16,14 @@ export default class PurchaseService {
     }
 
     public static async addToCart(item) {
-        const page = this.checkoutPage || (await Browser.getPage());
+        //const page = this.checkoutPage || (await Browser.getPage());
 
         const params = {
             recaptchaKey: RECAPTCHA_V3_SITE_KEY,
             item,
         };
 
-        const response = await page.evaluate(({ recaptchaKey, item }) => {
+        const response = await BrowserPool.evaluate(({ recaptchaKey, item }) => {
             return new Promise((resolve, reject) => {
                 (<any>window).grecaptcha
                     .execute(recaptchaKey, {
@@ -70,9 +71,9 @@ export default class PurchaseService {
     }
 
     public static async removeFromCart(id: string) {
-        const page = this.checkoutPage || (await Browser.getPage());
+        //const page = this.checkoutPage || (await Browser.getPage());
 
-        const response = await page.evaluate((id: string) => {
+        const response = await BrowserPool.evaluate((id: string) => {
             return new Promise((resolve, reject) => {
                 const params = new URLSearchParams();
                 params.append('Codigo', id);
@@ -110,7 +111,7 @@ export default class PurchaseService {
     }
 
     public static async purchase(creditCard, address) {
-        const page = this.checkoutPage || (await Browser.getPage());
+        //const page = this.checkoutPage || (await Browser.getPage());
 
         const params = {
             paymentMethod: PaymentMethod.CREDIT_CARD,
@@ -122,11 +123,11 @@ export default class PurchaseService {
         };
 
         if (!this.checkoutPage) {
-            await page.goto('https://www.nike.com.br/Checkout');
-            this.checkoutPage = page;
+            await BrowserPool.goto('https://www.nike.com.br/Checkout');
+            //this.checkoutPage = page;
         }
 
-        const response = await page.evaluate(
+        const response = await BrowserPool.evaluate(
             ({ address, paymentMethod, creditCard }) => {
                 return new Promise((resolve, reject) => {
                     const params = new URLSearchParams();
@@ -173,10 +174,10 @@ export default class PurchaseService {
 
     public static async createCheckoutPage(): Promise<boolean> {
         if (!this.checkoutPage || this.checkoutPage.isClosed()) {
-            this.checkoutPage = await Browser.newPage();
+            //this.checkoutPage = await Browser.newPage();
         }
 
-        await this.checkoutPage.goto('https://www.nike.com.br');
+        await BrowserPool.goto('https://www.nike.com.br');
         const addToCart: any = await this.addToCart({
             url:
                 'https://www.nike.com.br/Produto/Meia-Nike-Sportswear-Everyday-Essentials-3-pares/1-2-8-258496',
@@ -186,7 +187,7 @@ export default class PurchaseService {
         });
 
         if (addToCart.success) {
-            await this.checkoutPage.goto('https://www.nike.com.br/Checkout');
+            await BrowserPool.goto('https://www.nike.com.br/Checkout');
             await this.removeFromCart('193145890763');
             return true;
         }

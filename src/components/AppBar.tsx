@@ -58,7 +58,8 @@ const AppBar = () => {
 
     const createCheckoutPage = async () => {
         setCreatingCheckoutPage(true);
-        await ipcRenderer.invoke('create-checkout-page');
+        //await ipcRenderer.invoke('create-checkout-page');
+        ipcRenderer.invoke('create-checkout-page');
         setCreatingCheckoutPage(false);
     };
 

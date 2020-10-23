@@ -24,7 +24,7 @@ const NikeLogin = () => {
     const [submitting, setSubmitting] = useState(false);
     const dispatch = useDispatch();
 
-    const getUsername = () => ipcRenderer.invoke('get-username');
+    const getUsername = () =>  "Teste"//ipcRenderer.invoke('get-username');
 
     const login = async () => {
         setSubmitting(true);

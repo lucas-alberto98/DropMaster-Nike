@@ -8,6 +8,7 @@ import removeFromCart from './events/checkout/removeFromCart';
 import getAddresses from './events/user/getAddresses';
 import getCreditCards from './events/user/getCreditCards';
 import Browser from './utils/Browser';
+import BrowserPool from './utils/BrowserPool';
 import getCalendar from './events/calendar/getCalendar';
 import getProduct from './events/calendar/getProduct';
 import getProducts from './events/calendar/getProducts';
@@ -65,10 +66,11 @@ class Application {
 
         if (!packaged) this.mainWindow.webContents.openDevTools();
 
-        await Browser.open();
-
-        const page = await Browser.getPage();
-        page.goto('https://www.nike.com.br', { timeout: 0 });    
+        await BrowserPool.startPool();
+        //await BrowserPool.sleep(2);
+        await BrowserPool.goto('https://www.nike.com.br', { timeout: 0 });  
+        
+       
         
         this.mainWindow.on('closed', () => {
             this.mainWindow = null;

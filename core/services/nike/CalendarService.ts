@@ -1,13 +1,14 @@
 import moment = require('moment');
 import { JSDOM } from 'jsdom';
 import Browser from '../../utils/Browser';
+import BrowserPool from '../../utils/BrowserPool';
 import type { Sneaker, Size } from '../../types/Sneaker';
 
 export default class CalendarService {
     private static async getSneaker(sku: string): Promise<any> {
-        const page = await Browser.getPage();
+        //const page = await Browser.getPage();
 
-        const data: any = await page.evaluate((sku: string) => {
+        const data: any = await BrowserPool.evaluate((sku: string) => {
             return new Promise((resolve, reject) => {
                 fetch('https://www.nike.com.br/ProductLookup/' + sku, {
                     method: 'GET',
@@ -29,9 +30,9 @@ export default class CalendarService {
     }
 
     private static async getSneakerPage(url: string): Promise<any> {
-        const page = await Browser.getPage();
+        //const page = await Browser.getPage();
 
-        const data: any = await page.evaluate((url: string) => {
+        const data: any = await BrowserPool.evaluate((url: string) => {
             return new Promise((resolve, reject) => {
                 fetch(url, {
                     method: 'GET',
@@ -55,9 +56,9 @@ export default class CalendarService {
     }
 
     public static async getProduct(url: string): Promise<any> {
-        const page = await Browser.getPage();
+        //const page = await Browser.getPage();
 
-        const sku: any = await page.evaluate((url) => {
+        const sku: any = await BrowserPool.evaluate((url) => {
             return new Promise((resolve, reject) => {
                 const params = new URLSearchParams();
                 params.append('pageType', 'Snkrs');
@@ -122,9 +123,9 @@ export default class CalendarService {
     }
 
     public static async getProducts(): Promise<Array<Sneaker>> {
-        const page = await Browser.getPage();
+        //const page = await Browser.getPage();
 
-        const data: any = await page.evaluate(() => {
+        const data: any = await BrowserPool.evaluate(() => {
             return new Promise((resolve, reject) => {
                 fetch('https://www.nike.com.br/Snkrs#estoque', {
                     method: 'GET',
@@ -170,9 +171,9 @@ export default class CalendarService {
     }
 
     public static async getCalendar(): Promise<Array<Sneaker>> {
-        const page = await Browser.getPage();
+        //const page = await Browser.getPage();
 
-        const data: any = await page.evaluate(() => {
+        const data: any = await BrowserPool.evaluate(() => {
             return new Promise((resolve, reject) => {
                 fetch('https://www.nike.com.br/Snkrs#calendario', {
                     method: 'GET',

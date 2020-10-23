@@ -36,12 +36,14 @@ export default class Browser {
     }
 
     public static async open() {
-        this.instance = await puppeteer.launch({
-            headless: false,
-            args: ['--no-sandbox'],
-            executablePath: this.getChromePath(),
-            userDataDir: this.getChromeProfilePath(),
-        });
+        /*
+            this.instance = await puppeteer.launch({
+                headless: false,
+                args: ['--no-sandbox'],
+                executablePath: this.getChromePath(),
+                userDataDir: this.getChromeProfilePath(),
+            });
+        */
     }
 
     public static close() {
